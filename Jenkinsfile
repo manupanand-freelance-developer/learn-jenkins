@@ -1,20 +1,44 @@
 pipeline{
     agent any
     stages{
-        stage('One'){
+        stage('compile'){
+            when { branch 'main'}
             steps {
-                sh 'echo hello '
+                echo 'compile '
             }
         }
-        stage('Two'){
-            steps {
-                sh 'echo two '
+        stage('Test cases'){
+            when{
+                expression{ env.BRANCH_NAME != 'main'}
+            }
+             steps {
+                echo 'test cases '
             }
         }
-        stage('Three'){
+        stage('Docker build'){
+            when{
+                expression{ env.BRANCH_NAME != 'main'}
+            }
             steps {
-                sh 'echo three '
+                echo 'docker build '
             }
         }
+        stage('Docker push'){
+            when{
+                expression{ env.BRANCH_NAME != 'main'}
+            }
+            steps {
+                echo 'Docker push'
+            }
+        }
+         stage('deploy to dev'){
+            when{
+                expression{ env.BRANCH_NAME != 'main'}
+            }
+            steps {
+                echo 'deploy to dev'
+            }
+        }
+       
     }
 }
