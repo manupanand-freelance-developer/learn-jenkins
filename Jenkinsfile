@@ -2,7 +2,7 @@ pipeline{
     agent any
     stages{
         stage('compile'){
-            when { branch 'main'}
+            // when { branch 'main'} //rest will run
             steps {
                 echo 'compile '
             }
@@ -15,25 +15,34 @@ pipeline{
                 echo 'test cases '
             }
         }
-        stage('Docker build'){
+        stage('Docker build'){// run on tag
             when{
-                expression{ env.BRANCH_NAME != 'main'}
+                not {
+                    branch '**'
+                }
+                tag ''
             }
             steps {
                 echo 'docker build '
             }
         }
         stage('Docker push'){
-            when{
-                expression{ env.BRANCH_NAME != 'main'}
+             when{
+                not {
+                    branch '**'
+                }
+                tag ''
             }
             steps {
                 echo 'Docker push'
             }
         }
          stage('deploy to dev'){
-            when{
-                expression{ env.BRANCH_NAME != 'main'}
+             when{
+                not {
+                    branch '**'
+                }
+                tag ''
             }
             steps {
                 echo 'deploy to dev'
