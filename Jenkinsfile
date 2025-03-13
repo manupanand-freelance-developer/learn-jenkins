@@ -1,53 +1,23 @@
-pipeline{
-    agent any
-    stages{
-        stage('compile'){
-            // when { branch 'main'} //rest will run
-            steps {
-                echo 'compile '
-            }
+node(){ 
+
+    if(env.TAG_NAME){
+        stage('Docker build'){
+            print 'Docker build'
         }
-        stage('Test cases'){
-            when{
-                expression{ env.BRANCH_NAME != 'main'}
-            }
-             steps {
-                echo 'test cases '
-            }
+        stage('Docker Push'){
+            print 'Docker push'
         }
-        stage('Docker build'){// run on tag
-            when{
-                not {
-                    branch '**'
-                }
-                tag ''
-            }
-            steps {
-                echo 'docker build '
-            }
+        stage('Deploy to dev'){
+            print 'Deploy to dev'
         }
-        stage('Docker push'){
-             when{
-                not {
-                    branch '**'
-                }
-                tag ''
-            }
-            steps {
-                echo 'Docker push'
-            }
+    }else{
+        stage('Compile'){
+            print 'compile'
+        }  
+        stage('Test Case'){
+            print 'Test case'
         }
-         stage('deploy to dev'){
-             when{
-                not {
-                    branch '**'
-                }
-                tag ''
-            }
-            steps {
-                echo 'deploy to dev'
-            }
-        }
-       
     }
+    
+    
 }
